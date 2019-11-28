@@ -2,8 +2,10 @@ package models
 
 import (
 	"github.com/google/uuid"
+	"github.com/jinzhu/gorm"
 )
 
+// ResizeParams contains resized data
 type ResizeParams struct {
 	With   uint `json:"with"`
 	Height uint `json:"height"`
@@ -11,17 +13,16 @@ type ResizeParams struct {
 
 // Images contains links for original and resized image
 type Images struct {
-	ID       uuid.UUID `json:"id"`
-	Name     string    `json:"name"`
-	Original string    `json:"original"`
-	Resized  string    `json:"resized"`
-	UserID   uuid.UUID
+	ID       uuid.UUID `json:"id"        gorm:"primary_key; column:id"`
+	Original string    `json:"original"  gorm:"column:original"`
+	Resized  string    `json:"resized"   gorm:"column:resized"`
+	UserID   uuid.UUID `json:"-"         gorm:"column:user_id"`
 }
 
-// User describes user
-type User struct {
-	ID          uuid.UUID `json:"id"`
-	Name        string    `json:"name"     validate:"required"`
-	Password    string    `json:"password" validate:"required,password"`
-	PhoneNumber string    `json:"phone"    validate:"required"`
+func (i Images) TableName() string {
+	return "images"
+}
+
+func (i *Images) BeforeCreate(scope *gorm.Scope) error {
+	return scope.SetColumn("id", uuid.New())
 }

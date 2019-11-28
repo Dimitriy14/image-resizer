@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	apploader "github.com/Dimitriy14/golang-restik/src/app-loader"
+	"github.com/Dimitriy14/image-resizing/apploader"
 	"github.com/Dimitriy14/image-resizing/config"
 	"github.com/Dimitriy14/image-resizing/logger"
 	"github.com/Dimitriy14/image-resizing/services"

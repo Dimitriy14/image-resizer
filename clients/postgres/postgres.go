@@ -5,16 +5,20 @@ import (
 
 	"github.com/Dimitriy14/image-resizing/config"
 	"github.com/Dimitriy14/image-resizing/logger"
+	"github.com/Dimitriy14/image-resizing/models"
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 const dbInfo = "host=%s port=%s user=%s password=%s dbname=%s sslmode=disable"
 
-var Client PGClient
+var Client *PGClient
 
 type PGClient struct {
 	Session *gorm.DB
 }
+
+const pg = "postgres"
 
 func Load() error {
 	url := fmt.Sprintf(
@@ -26,13 +30,17 @@ func Load() error {
 		config.Conf.Postgres.DBName,
 	)
 
-	db, err := gorm.Open("postgres", url)
+	fmt.Println(url)
+
+	db, err := gorm.Open(pg, url)
 	if err != nil {
-		return err
+		return fmt.Errorf("connecting to postgress: %s", err)
 	}
 
-	Client = PGClient{Session: db}
+	Client = &PGClient{Session: db}
 	db.SetLogger(logger.NewGormLogger(logger.Log))
 	db.LogMode(true)
+
+	db.AutoMigrate(&models.Images{})
 	return nil
 }

@@ -20,23 +20,26 @@ type Configuration struct {
 	BasePath  string `json:"BasePath"    default:"/resizer"`
 
 	Postgres struct {
-		Host     string `json:"Host"`
-		Port     string `json:"Port"`
+		Host     string `json:"Host"     default:"localhost"`
+		Port     string `json:"Port"     default:"5431"`
 		DBName   string `json:"DBName"   default:"resizer"`
-		User     string `json:"User"     default:"admin"`
-		Password string `json:"Password" default:"Pass@1377"`
+		User     string `json:"User"     default:"app"`
+		Password string `json:"Password" default:"1337"`
 	} `json:"Postgres"`
 
 	AWS struct {
+		ID     string `json:""    envconfig:"AWS_ACCESS_KEY_ID"`
+		Secret string `json:"-"   envconfig:"AWS_SECRET_ACCESS_KEY"`
+
 		Region               string `json:"Region"               default:"eu-central-1"`
 		Bucket               string `json:"Bucket"               default:"resized-images-yal"`
 		ACL                  string `json:"ACL"                  default:"public-read"`
 		ServerSideEncryption string `json:"ServerSideEncryption" default:"AES256"`
-	}
+		ImageStorageURL      string `json:"ImageStorageURL"      default:"https://resized-images-yal.s3.eu-central-1.amazonaws.com"`
+	} `json:"AWS"`
 
-	UseLogFile bool   `json:"UseLogFile" default:"false"`
-	LogFile    string `json:"LogFile"    default:"resizer.log"`
-	LogLevel   string `json:"LogLevel"   default:"debug"`
+	LogFile  string `json:"LogFile"`
+	LogLevel string `json:"LogLevel"   default:"debug"`
 }
 
 func Load() error {
@@ -65,7 +68,7 @@ func readFile(cfg *Configuration) error {
 }
 
 func readEnv(cfg *Configuration) error {
-	err := envconfig.Process("", cfg)
+	err := envconfig.Process("envconfig", cfg)
 	if err != nil {
 		return err
 	}

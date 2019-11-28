@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  postgres:
+    container_name: postgresdb
+    image: postgres:11
+    restart: always
+    environment:
+      POSTGRES_DB: resizer
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: 1337
+    ports:
+      - "5431:5432"

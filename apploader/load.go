@@ -3,6 +3,7 @@ package apploader
 import (
 	"fmt"
 
+	"github.com/Dimitriy14/image-resizing/clients/bucket"
 	"github.com/Dimitriy14/image-resizing/clients/postgres"
 	"github.com/Dimitriy14/image-resizing/config"
 	"github.com/Dimitriy14/image-resizing/logger"
@@ -22,6 +23,7 @@ var basicLoaders = LoaderList{
 
 var clientLoaders = LoaderList{
 	{"database", postgres.Load},
+	{"bucket", bucket.Load},
 }
 
 func LoadApplicationServices() error {
