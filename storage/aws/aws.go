@@ -92,6 +92,20 @@ func (s *storageImpl) UploadWithOriginal(filExt string, originalImgContent, resi
 	return fmt.Sprintf("%s/%s", s.awsStorageUrl, originFileName), fmt.Sprintf("%s/%s", s.awsStorageUrl, resizedFileName), nil
 }
 
+func (s *storageImpl) DeleteImage(addr string) error{
+	a, err := url.Parse(addr)
+	if err != nil {
+		return err
+	}
+
+	_, err = s.bucketS3.Uploader.S3.DeleteObject(&s3.DeleteObjectInput{
+		Bucket: aws.String(s.bucketName),
+		Key:    aws.String(a.Path[1:]),
+	})
+
+	return err
+}
+
 func (s *storageImpl) upload(fileName string, content []byte) error {
 	_, err := s.bucketS3.Uploader.Upload(&s3manager.UploadInput{
 		Bucket:               aws.String(s.bucketName),

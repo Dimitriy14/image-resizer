@@ -1,0 +1,161 @@
+swagger: "2.0"
+
+info:
+  version: 1.0.0
+  title: Agent Configuration MS API
+schemes:
+  - http
+basePath: /resizer/v1
+produces:
+  - application/json
+
+paths:
+  /images:
+    get:
+      description: get images
+      produces:
+        - application/json
+      parameters:
+        - name: "UID"
+          in: header
+          type: string
+          format: uuid
+          required: true
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Images'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ErrorMessage'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.ErrorMessage'
+      summary: List of images for user
+
+    post:
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: image
+          type: file
+          required: true
+        - in: formData
+          name: width
+          type: integer
+          required: true
+        - in: formData
+          name: height
+          type: integer
+          required: true
+        - name: "UID"
+          in: header
+          type: string
+          format: uuid
+          required: true
+      description: resize image
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Images'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ErrorMessage'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.ErrorMessage'
+      summary: Resize and Save new users image
+
+  /images/{imageID}:
+    put:
+      consumes:
+        - application/json
+      parameters:
+        - name: "imageID"
+          in: path
+          type: string
+          format: uuid
+          required: true
+        - name: "UID"
+          in: header
+          type: string
+          format: uuid
+          required: true
+        - name: "Resizing parameters"
+          in: body
+          schema:
+            $ref: '#/definitions/models.ResizeParams'
+      description: resize image
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Images'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ErrorMessage'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.ErrorMessage'
+      summary: Resize existed image
+
+definitions:
+
+  common.Error:
+    properties:
+      message:
+        type: string
+    type: object
+
+  common.ErrorMessage:
+    properties:
+      error:
+        $ref: '#/definitions/common.Error'
+        type: object
+    type: object
+
+  models.Images:
+    properties:
+      id:
+        type: string
+      original:
+        type: string
+      resized:
+        type: string
+    type: object
+
+  models.ResizeParams:
+    type: object
+    properties:
+      width:
+        type: integer
+      height:
+        type: integer
+

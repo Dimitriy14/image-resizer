@@ -8,12 +8,7 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/jinzhu/gorm"
-
-	"github.com/gorilla/mux"
-
 	"github.com/Dimitriy14/image-resizing/config"
-
 	"github.com/Dimitriy14/image-resizing/logger"
 	"github.com/Dimitriy14/image-resizing/models"
 	"github.com/Dimitriy14/image-resizing/repository"
@@ -21,6 +16,8 @@ import (
 	"github.com/Dimitriy14/image-resizing/storage"
 	"github.com/Dimitriy14/image-resizing/usecases"
 	"github.com/google/uuid"
+	"github.com/gorilla/mux"
+	"github.com/jinzhu/gorm"
 )
 
 const (
@@ -183,10 +180,17 @@ func (s *serviceImpl) ResizeExistedImage(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	//user doesn't have to wait till his old resized image will be deleted
+	go s.deleteImage(img.Resized)
 	s.log.Debugf("Successfully resized and saved image for user %q", uid)
 
 	common.RenderJSONCreated(w, &newImg)
+}
 
+func (s *serviceImpl) deleteImage(addr string) {
+	if err := s.bucket.DeleteImage(addr); err != nil {
+		s.log.Errorf("got an error while deleting image from S3 with addr: %s", addr)
+	}
 }
 
 func extractFormData(r *http.Request) ([]byte, string, models.ResizeParams, error) {
