@@ -48,6 +48,16 @@ func RenderJSONCreated(w http.ResponseWriter, response interface{}) {
 	render(w, http.StatusCreated, data)
 }
 
+// RenderJSON is used for rendering JSON response body
+func RenderJSON(w http.ResponseWriter, response interface{}) {
+	data, err := json.Marshal(response)
+	if err != nil {
+		SendInternalServerError(w, "failed to marshal response", err)
+		return
+	}
+	render(w, http.StatusOK, data)
+}
+
 func render(w http.ResponseWriter, code int, response []byte) {
 	w.Header().Set(contentType, applicationJSON)
 	w.Header().Set("Access-Control-Allow-Origin", "*")

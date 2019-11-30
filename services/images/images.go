@@ -184,7 +184,7 @@ func (s *serviceImpl) ResizeExistedImage(w http.ResponseWriter, r *http.Request)
 	go s.deleteImage(img.Resized)
 	s.log.Debugf("Successfully resized and saved image for user %q", uid)
 
-	common.RenderJSONCreated(w, &newImg)
+	common.RenderJSON(w, &newImg)
 }
 
 func (s *serviceImpl) deleteImage(addr string) {
