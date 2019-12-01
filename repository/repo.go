@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
+//go:generate mockgen -destination=../mocks/mock-repo.go -mock_names=Repository=MockRepository -package=mocks github.com/Dimitriy14/image-resizing/repository Repository
 type Repository interface {
 	GetAllImages(userID uuid.UUID) ([]models.Images, error)
 	GetImageByID(userID, imageID uuid.UUID) (models.Images, error)

@@ -27,12 +27,14 @@ const (
 	formHeight   = "height"
 )
 
+// Service provides functionality to retrieving and saving images
 type Service interface {
 	GetAllImages(w http.ResponseWriter, r *http.Request)
 	ResizeNewImage(w http.ResponseWriter, r *http.Request)
 	ResizeExistedImage(w http.ResponseWriter, r *http.Request)
 }
 
+// NewService creates new service
 func NewService(log logger.Logger, bucket storage.Storage, repo repository.Repository, resizer usecases.ImageResizer) Service {
 	return &serviceImpl{
 		log:           log,
@@ -65,7 +67,7 @@ func (s *serviceImpl) GetAllImages(w http.ResponseWriter, r *http.Request) {
 
 	s.log.Debugf("Successfully retrieved all images for user %q", uid)
 
-	common.RenderJSONCreated(w, images)
+	common.RenderJSON(w, images)
 }
 
 func (s *serviceImpl) ResizeNewImage(w http.ResponseWriter, r *http.Request) {
@@ -131,7 +133,7 @@ func (s *serviceImpl) ResizeExistedImage(w http.ResponseWriter, r *http.Request)
 	if err != nil {
 		if gorm.IsRecordNotFoundError(err) {
 			s.log.Errorf("cannot find image with id (%q) for user (%q) due to: %s", imageID, uid, err)
-			common.SendNotFound(w, "image id is not found", err)
+			common.SendNotFound(w, "image id is not found: %s", err)
 			return
 		}
 
@@ -196,7 +198,7 @@ func (s *serviceImpl) deleteImage(addr string) {
 func extractFormData(r *http.Request) ([]byte, string, models.ResizeParams, error) {
 	err := r.ParseMultipartForm(int64(maxImageSize))
 	if err != nil {
-		return nil, "", models.ResizeParams{}, fmt.Errorf("parsing multipart form error; %s", err)
+		return nil, "", models.ResizeParams{}, fmt.Errorf("parsing multipart form error: %s", err)
 	}
 
 	file, head, err := r.FormFile(image)

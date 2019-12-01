@@ -8,6 +8,7 @@ import (
 	"github.com/disintegration/imaging"
 )
 
+//go:generate mockgen -destination=../mocks/mock-resizer.go -mock_names=ImageResizer=MockResizer -package=mocks github.com/Dimitriy14/image-resizing/usecases ImageResizer
 type ImageResizer interface {
 	Resize(imageContent []byte, params models.ResizeParams) ([]byte, error)
 }
