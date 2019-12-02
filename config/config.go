@@ -44,7 +44,7 @@ func Load() error {
 	if err := readFile(&Conf); err != nil {
 		return err
 	}
-	log.Printf("Configuration: %+v", Conf)
+
 	if err := mergeEnvconfig(&Conf); err != nil {
 		return err
 	}
@@ -74,7 +74,7 @@ func mergeEnvconfig(config *Configuration) (err error) {
 
 			continue
 		}
-		fmt.Println(envKey, envValue)
+
 		structFieldName := configElements.Field(i).Name
 		envField := reflect.ValueOf(config).Elem().FieldByName(structFieldName)
 		switch envField.Kind() {
