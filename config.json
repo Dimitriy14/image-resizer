@@ -2,21 +2,17 @@
    "ListenURL":":8182",
    "BasePath":"/resizer",
 
-    "Postgres" : {
-        "Host": "localhost",
-        "Port": "5431",
-        "DBName":"resizer",
-        "User":"app",
-        "Password":"1337"
-    },
+    "PostgresHost": "localhost",
+    "PostgresPort": "5431",
+    "PostgresDBName":"resizer",
+    "PostgresUser":"app",
+    "PostgresPassword":"1337",
 
-    "AWS": {
-        "Region":"eu-central-1",
-        "Bucket":"resized-images-yal",
-        "ACL":"public-read",
-        "ServerSideEncryption":"AES256",
-        "ImageStorageURL": "https://resized-images-yal.s3.eu-central-1.amazonaws.com"
-    },
+    "AWSRegion":"eu-central-1",
+    "AWSBucket":"resized-images-yal",
+    "AWSACL":"public-read",
+    "AWSServerSideEncryption":"AES256",
+    "AWSImageStorageURL": "https://resized-images-yal.s3.eu-central-1.amazonaws.com",
 
     "LogFile":"",
     "LogLevel":"debug"

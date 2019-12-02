@@ -23,11 +23,11 @@ const pg = "postgres"
 func Load() error {
 	url := fmt.Sprintf(
 		dbInfo,
-		config.Conf.Postgres.Host,
-		config.Conf.Postgres.Port,
-		config.Conf.Postgres.User,
-		config.Conf.Postgres.Password,
-		config.Conf.Postgres.DBName,
+		config.Conf.PostgresHost,
+		config.Conf.PostgresPort,
+		config.Conf.PostgresUser,
+		config.Conf.PostgresPassword,
+		config.Conf.PostgresDBName,
 	)
 
 	fmt.Println(url)

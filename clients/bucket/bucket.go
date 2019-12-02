@@ -17,8 +17,8 @@ type S3Client struct {
 
 func Load() error {
 	sess, err := session.NewSession(&aws.Config{
-		Region:      aws.String(config.Conf.AWS.Region),
-		Credentials: credentials.NewStaticCredentials(config.Conf.AWS.ID, config.Conf.AWS.Secret, ""),
+		Region:      aws.String(config.Conf.AWSRegion),
+		Credentials: credentials.NewStaticCredentials(config.Conf.AWSID, config.Conf.AWSSecret, ""),
 	})
 	if err != nil {
 		return err

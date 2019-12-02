@@ -20,10 +20,10 @@ import (
 func NewStorage(bucketS3 *bucket.S3Client) storage.Storage {
 	return &storageImpl{
 		bucketS3:         bucketS3,
-		bucketName:       config.Conf.AWS.Bucket,
-		acl:              config.Conf.AWS.ACL,
-		serverEncryption: config.Conf.AWS.ServerSideEncryption,
-		awsStorageUrl:    config.Conf.AWS.ImageStorageURL,
+		bucketName:       config.Conf.AWSBucket,
+		acl:              config.Conf.AWSACL,
+		serverEncryption: config.Conf.AWSServerSideEncryption,
+		awsStorageUrl:    config.Conf.AWSImageStorageURL,
 	}
 }
 
@@ -92,7 +92,7 @@ func (s *storageImpl) UploadWithOriginal(filExt string, originalImgContent, resi
 	return fmt.Sprintf("%s/%s", s.awsStorageUrl, originFileName), fmt.Sprintf("%s/%s", s.awsStorageUrl, resizedFileName), nil
 }
 
-func (s *storageImpl) DeleteImage(addr string) error{
+func (s *storageImpl) DeleteImage(addr string) error {
 	a, err := url.Parse(addr)
 	if err != nil {
 		return err

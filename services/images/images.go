@@ -41,7 +41,7 @@ func NewService(log logger.Logger, bucket storage.Storage, repo repository.Repos
 		bucket:        bucket,
 		repo:          repo,
 		resizer:       resizer,
-		awsStorageUrl: config.Conf.AWS.ImageStorageURL,
+		awsStorageUrl: config.Conf.AWSImageStorageURL,
 	}
 }
 
